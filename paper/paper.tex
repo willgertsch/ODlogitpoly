@@ -81,7 +81,7 @@ The genetic algorithm (Holland, 1975) is a nature-inspired metaheuristic optimiz
 
 There are many variations on the genetic algorithm, but these algorithms usually contain the following three steps that are run every iteration of the algorithm. First, the \textit{crossover} operation combines two parent solutions to make two child solutions. Second, the \textit{mutation} operation randomly perturbs the child solutions. Finally, \textit{fitness} is assessed and the solution vectors that have the best objective function values move on to the next generation.
 
-The following paragraphs detail the implementation of the genetic algorithm in PlatEMO. Let $N$ be the population size and let $D$ be the number of variables in the optimization problem.
+The following paragraphs detail the implementation of the genetic algorithm in PlatEMO. Let $N$ be the population size and let $D$ be the number of variables in the optimization problem. For simplicity, the description will assume $D=1$, but the process is eaily generalized to an arbritrary number of variables.
 
 \begin{flushleft}
 \textbf{Selection}
@@ -91,11 +91,35 @@ The first step in the genetiec algorithm is to select the mating pool via tourna
 \begin{flushleft}
 \textbf{Crossover}
 \end{flushleft}
-Once the mating pool has been selected, the two parents enter the crossover stage where genetic information is exchanged. This is done using simulated binary crossover (Deb et. al. 2007).
+Once the mating pool has been selected, the two parents enter the crossover stage where genetic information is exchanged. This is done using the simulated binary crossover procedure (Deb et. al. 2007). This procedure will generate a probability distribution from which the child characteristics are drawn from.
+
+First, $\mu$ is drawn from the uniform distribution on $(0,1)$. If $u \leq 0.5$, then set $\beta = 2\mu^{1/(d_c+1)}$. If $\mu > 0.5$, then set $\beta = (2-2\mu)^{-1/(d_c+1)}$. 
+
+The $d_c$ parameter is the distribution index of the simulated binary crossover and is related to the variance of the child solutions from the parents. If $d_c$ is large, then the children will likely be close to the parents.  If $d_c$ is small, then the child solutions are more likely to be farther from the parents.
+
+The $\beta$ calculated in this way is a spread factor defined as 
+$$
+\beta = \left| \frac{C_2 - C_1}{P_2 - P_1} \right|
+$$
+where $C_1, C_2$ are child values and $P_1, P_2$ are the parent values. Therefore $\beta$ measures the distance between children relative to the distance between parents.
+
+Once $\beta$ has been found, the child solutions may be computed as
+$$
+C_1 = 0.5\left[(1+\beta)P_1 + (1-\beta)P_2 \right]
+$$
+and 
+$$
+C_2 = 0.5\left[(1-\beta)P_1 + (1+\beta)P_2 \right]
+$$
+
+Finally, this update is applied from probability $p_c$. In the implementation used by PlatEMO, additional steps are to set an expected number of crossovers for each pair of parents. On average, we should see $0.25 p_cD$ crossovers.
 
 \begin{flushleft}
 \textbf{Mutation}
 \end{flushleft}
+After crossover, each child solution is randomly perturbed. This helps the algorithm to better explore the objective space and hopefully escape local optima. This is acheived using a polnomial probabily distribution with mean at the current value and with variance equal to a function of $d_M$, the distribution index of mutation.
+
+
 
 \begin{flushleft}
 \textbf{Fitness}
