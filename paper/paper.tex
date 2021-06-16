@@ -72,8 +72,6 @@ $$
 The equivalence theorem says a design is locally D-optimal if and only if $ch(x) \leq 0 $ for all $x$ in the design interval with equality at the design points.
 
 
-
-\subsection{Particle Swarm}
 \subsection{Genetic Algorithm}
 Finding a locally D-optimal design for the logistic model requires we optimize a function of several variables. This can be accomplished analytically for a linear $\eta$, but the complexity dramatically increases for a quadratic $\eta$ and requires a numerical solution. The objective function is complicated and changes between linear and quadratic models. Therefore, we should use an optimization algorithm that is gradient free. Additionally, we should use an algorithm that can incorporate constraints on the design space and require that the weight variables sum to 1.
 
@@ -124,14 +122,14 @@ After crossover, each child solution is randomly perturbed. This helps the algor
 \begin{flushleft}
 \textbf{Fitness}
 \end{flushleft}
-
+Once the crossover and mutation operations take place, there will be a population of size $2N$. The objective function is evaluated for each of these solutions and the best $N$ are chosen to move on to the next generation.
 
 
 
 \section{Results}
-The genetic algorithm was implemented using the PlatEMO framework in MATLAB. We used the built-in algorithm ``GA'' with default parameters ($p_C = 1, d_C = 20, p_M = 1, d_M = 20$). We found that running the algorithm for 100000 function evaluations with a swarm size of 1000 was able produce close to optimal designs for every design we tried. 
+The genetic algorithm was implemented using the PlatEMO framework in MATLAB. We used the built-in algorithm ``GA'' with default parameters ($p_C = 1, d_C = 20, p_M = 1, d_M = 20$). We found that running the algorithm for 100000 function evaluations with a swarm size of 1000 was able produce near optimal designs for every design we tried. 
 
-When the optimal number of design points was unknown, we ran the algorithm once with 10 design points and then made a guess at the correct number of design points. The optimal number of design points was easy to find after seeing the sensitivity plot.
+When the optimal number of design points was unknown, we ran the algorithm once with 10 design points and then made a guess at the correct number of design points. The optimal number of design points was easy to guess after seeing the sensitivity plot.
 
 \subsection{Linear $\eta$ on $(-\infty, \infty)$}
 If $\eta_i = \beta_0 + \beta_1 x_i$ and the design interval is $(-\infty, \infty)$, it can be shown that the locally D-optimal design is equally weighted at $x_1$ and $x_2$ where
@@ -333,6 +331,13 @@ Unfortunately, not all designs have a sensitivity plot that can easily plotted. 
 
 \section{Applications}
 \section{Conclusions}
+In this paper, we find locally D-optimal designs for linear and quadratic logistic regression using a genetic algorithm. We confirm existing analytical results for the linear model on any design interval. Additionally, we find a new design in the case when the design interval does not include the original optimal design points on the unbounded interval. Finally, we confirm previous results for a quadratic model and find new designs for a bounded design interval.
+
+ Previous results depend on a variety of analytic and numeric methods to find the same designs. The advantage of our approach is that the genetic algorithm is a single method for finding optimal designs. This makes it easy for an investigator to change design parameters and find optimal designs for multiple scenarios.
+ 
+Our approach can be extended to other design problems for the logistic regression model. This paper considered locally D-optimal designs, but future work may consider A, E, and G optimal designs. The logit link function may also be exchanged for other link functions. An extension to fractional polynomials (Royston \& Altman, 1994) may also be possible.
+ 
+ 
 \section{References}
 \section{Appendix}
 \end{document}
