@@ -9,7 +9,7 @@
 ## Usage
 The best way to use this software is to open the project.m file in MATLAB and run it by clicking the "Run" button in MATLAB's user interface. After the genetic algorithm has run, a plot of the sensitivity function will be shown along with numerical values for the design. There are a number of options that can be specified by the user in the first part of the project.m file.
 
-Design options:
+**Design options:**
 
 * beta: a vector that contains nominal parameter values. If beta is length 2, then a linear predictor is used. If beta is length 3, a quadratic predictor is used.
 
@@ -17,7 +17,7 @@ Design options:
 
 * numpts: An integer number that sets the number of design points. You may have to run the code several times with different values to determine what the optimal number of designs points is.
 
-Alorithm options:
+**Algorithm options:**
 
 * method: Controls the algorithm to use. Refer to the PlatEMO manual for a list of possible single-objective algorithms to use. 
 
@@ -33,7 +33,7 @@ Alorithm options:
 
 * disM: Distribution index of mutation. Decreasing disM will result in larger mutations from the original child solution. 
 
-There is also a work in progress option:
+**Work in progress options:**
 
 * opt: May add support for A, E, and G optimal designs.
 
