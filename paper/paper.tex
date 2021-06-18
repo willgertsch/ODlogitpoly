@@ -20,21 +20,21 @@ Logistic regression is a popular model for a binary outcome. While locally D-opt
 \end{abstract}
 
 \section{Introduction}
-Logistic regression is a popular model for linking a binary outcome to one or more covariates. For the case of a single covariate, the model links a linear function of the covariate to the mean of the Bernouolli distribution. The resulting model can then be used to model the probability of an event occuring given a certain value of the covariate. This model has many extensions, including the addition of a squared term to the linear predictor.
+Logistic regression is a popular model for linking a binary outcome to one or more covariates. For the case of a single covariate, the model links a linear function of the covariate to the mean of the Bernoulli distribution. The resulting model can then be used to model the probability of an event occurring given a certain value of the covariate. This model has many extensions, including the addition of a squared term to the linear predictor.
 
-Before using logistic regression, it is important to design the experiment with the model in mind. For a fixed sample size $N$, we may wish to measure the covariate and outcome at certain points such that optimal model performance is obtained. Additionally, we should also consider how many of the covariate measurements to take at each point in the design space. Therefore, we want to find an optimal design $\xi$ such that the model achieves optimal performance according to some optimality criterion. A D-optimal design minimizes the volume of the confidence ellipsoid and is a common approach to this problem. For non-linear models, such as logistic regression, the D-optimal design depends on the parameters, so we looks for a locally optimal design given the paramters. These nomial values may be obtained from an intial analysis or from previous results.
+Before using logistic regression, it is important to design the experiment with the model in mind. For a fixed sample size $N$, we may wish to measure the covariate and outcome at certain points such that optimal model performance is obtained. Additionally, we should also consider how many of the covariate measurements to take at each point in the design space. Therefore, we want to find an optimal design $\xi$ such that the model achieves optimal performance according to some optimality criterion. A D-optimal design minimizes the volume of the confidence ellipsoid and is a common approach to this problem. For non-linear models, such as logistic regression, the D-optimal design depends on the parameters, so we looks for a locally optimal design given the parameters. These nominal values may be obtained from an initial analysis or from previous results.
 
-There are many papers on optimal designs for logistic regression. The locally D-optiaml design for the lienar predictor $\eta = \beta_0 + \beta_1 x$ can be found analytically. Ford (1972) proposed a D-optimal design on an unbounded interval \textbf{CHECH}. Sebastinani and Settimi (1992) derive D-optimal designs on several bounded design intervals. Numerical appproaches have also been tried. For example, Lall et. al (2018) find D-optimal designs on using a modified Fedorov algorithm.
+There are many papers on optimal designs for logistic regression. The locally D-optimal design for the linear predictor $\eta = \beta_0 + \beta_1 x$ can be found analytically. Ford et. al. [2] proposed a D-optimal design on an unbounded interval. Sebastinani and Settimi[11] derive D-optimal designs on several bounded design intervals. Numerical appproaches have also been tried. For example, Lall et. al [7] find D-optimal designs on using a modified Fedorov algorithm.
 
-For the quadratic model with linear predictor $\eta = \beta_0 + \beta_1 + \beta_2x^2$, there have been no analytic results. Fornious (2005) found locally D-optimal designs numerically for the quadratic model on an unbounded interval. Results for a bounded interval are unknown.
+For the quadratic model with linear predictor $\eta = \beta_0 + \beta_1 + \beta_2x^2$, there have been no analytic results. Fornius [3] found locally D-optimal designs numerically for the quadratic model on an unbounded interval. Results for a bounded interval are unknown.
 
-For more complicated models, such as the quadratic logistic model, it can ber difficult an optimal design analytically. Numerical approaches such as by Fornious also rely on significant analytical work to find the optimal value of the objective function. Small changes to the model or to the design interval might result in a completely new problem with new analytical challenges.
+For more complicated models, such as the quadratic logistic model, it can be difficult an optimal design analytically. Numerical approaches such as by Fornius also rely on significant analytical work to find the optimal value of the objective function. Small changes to the model or to the design interval might result in a completely new problem with new analytical challenges.
 
 Another approach is to use a general purpose optimization algorithm to find the optimal designs. However, some algorithms are better suited for the task. For example, it can difficult to take the gradient of the objective function for many optimal design problems. This is more difficult by the fact that changing the model will result in a new gradient that has to be derived. Therefore, it is better to use a gradient-free algorithm for these problems. Another problem that arises is local optima. Thus, we will want to use an optimization algorithm that can ``explore" the optimization space without getting stuck in local optima.
 
-Nature-inspired metaheuristics are a family of algorithms that are gradient free and have mechanisms for escaping local optima. Examples include particle swarm optimization (Kennedy, Eberhart,  1995), the artificial bee colony algorithm (Karaboğa, 2005), and differential evolution (Storn, Price, 1997). These algorithms mimic the behavior of animals or nature processes to find a global optimum. 
+Nature-inspired metaheuristics are a family of algorithms that are gradient free and have mechanisms for escaping local optima. Examples include particle swarm optimization [6], the artificial bee colony algorithm [5], and differential evolution [9]. These algorithms mimic the behavior of animals or nature processes to find a global optimum. 
 
-In this paper, we use the genetic algorithm (Holland, 1975) which is inspired by natural selection. The algorithm starts with an initial population of solution vectors and then combines and mutates the solutions to hopefully produce more solutions that have a better objective function value. The genetic algorithm has many different implementations and is widely applied to solve optimization problems. In this paper, we use the genetic algorithm to find locally D-optimal designs for several logistic regression models.
+In this paper, we use the genetic algorithm [4] which is inspired by natural selection. The algorithm starts with an initial population of solution vectors and then combines and mutates the solutions to hopefully produce more solutions that have a better objective function value. The genetic algorithm has many different implementations and is widely applied to solve optimization problems. In this paper, we use the genetic algorithm to find locally D-optimal designs for several logistic regression models.
 
 
 
@@ -96,21 +96,21 @@ The equivalence theorem says a design is locally D-optimal if and only if $ch(x)
 \subsection{Genetic Algorithm}
 Finding a locally D-optimal design for the logistic model requires we optimize a function of several variables. This can be accomplished analytically for a linear $\eta$, but the complexity dramatically increases for a quadratic $\eta$ and requires a numerical solution. The objective function is complicated and changes between linear and quadratic models. Therefore, we should use an optimization algorithm that is gradient free. Additionally, we should use an algorithm that can incorporate constraints on the design space and require that the weight variables sum to 1.
 
-The genetic algorithm (Holland, 1975) is a nature-inspired metaheuristic optimization algorithm. The algorithm mimics natural selection with the intended goal of ``evolving" a population of solution vectors towards an optimal value. Like other nature-inspired optimization algorithms, the genetic algorithm has the advantages of being gradient free, able to accommodate constraints, and able to escape local optimums. 
+The genetic algorithm 43] is a nature-inspired metaheuristic optimization algorithm. The algorithm mimics natural selection with the intended goal of ``evolving" a population of solution vectors towards an optimal value. Like other nature-inspired optimization algorithms, the genetic algorithm has the advantages of being gradient free, able to accommodate constraints, and able to escape local optimums. 
 
 There are many variations on the genetic algorithm, but these algorithms usually contain the following three steps that are run every iteration of the algorithm. First, the \textit{crossover} operation combines two parent solutions to make two child solutions. Second, the \textit{mutation} operation randomly perturbs the child solutions. Finally, \textit{fitness} is assessed and the solution vectors that have the best objective function values move on to the next generation.
 
-The following paragraphs detail the implementation of the genetic algorithm in PlatEMO. Let $N$ be the population size and let $D$ be the number of variables in the optimization problem. For simplicity, the description will assume $D=1$, but the process is eaily generalized to an arbritrary number of variables.
+The following paragraphs detail the implementation of the genetic algorithm in PlatEMO. Let $N$ be the population size and let $D$ be the number of variables in the optimization problem. For simplicity, the description will assume $D=1$, but the process can be generalized to an arbitrary number of variables.
 
 \begin{flushleft}
 \textbf{Selection}
 \end{flushleft}
-The first step in the genetiec algorithm is to select the mating pool via tournament selection. $N$ paris are sampled with replacement from the population. The objective function values for eahc of these pairs is combared and the most opitmal of the pair is selected.
+The first step in the genetic algorithm is to select the mating pool via tournament selection. $N$ paris are sampled with replacement from the population. The objective function values for each of these pairs is compared and the most optimal of the pair is selected.
 
 \begin{flushleft}
 \textbf{Crossover}
 \end{flushleft}
-Once the mating pool has been selected, the two parents enter the crossover stage where genetic information is exchanged. This is done using the simulated binary crossover procedure (Deb et. al. 2007). This procedure will generate a probability distribution from which the child characteristics are drawn from.
+Once the mating pool has been selected, the two parents enter the crossover stage where genetic information is exchanged. This is done using the simulated binary crossover procedure [1]. This procedure will generate a probability distribution from which the child characteristics are drawn from.
 
 First, $\mu$ is drawn from the uniform distribution on $(0,1)$. If $u \leq 0.5$, then set $\beta = 2\mu^{1/(d_c+1)}$. If $\mu > 0.5$, then set $\beta = (2-2\mu)^{-1/(d_c+1)}$. 
 
@@ -136,7 +136,7 @@ Finally, this update is applied from probability $p_c$. In the implementation us
 \begin{flushleft}
 \textbf{Mutation}
 \end{flushleft}
-After crossover, each child solution is randomly perturbed. This helps the algorithm to better explore the objective space and hopefully escape local optima. This is acheived using a polnomial probabily distribution with mean at the current value and with variance equal to a function of $d_M$, the distribution index of mutation.
+After crossover, each child solution is randomly perturbed. This helps the algorithm to better explore the objective space and hopefully escape local optima. This is achieved using a polynomial probability distribution with mean at the current value and with variance equal to a function of $d_M$, the distribution index of mutation.
 
 
 
@@ -208,7 +208,7 @@ $\mathbf{\beta}$ & \textbf{Theoretical} & \textbf{GA} \\
 \end{figure}
 
 \subsection{Linear $\eta$ on other intervals}
-The genetic algorithm can find designs on an arbitrary design interval $[a,b]$. In general, the optimal design will change from the design on $(-\infty, \infty)$ if any of the designs points is no longer included in the interval. Therefore, at least one of the two design points will likely be one of the bounds of the interval. Theoretical justifications for this phenomenon can be found in Sebastiani. 
+The genetic algorithm can find designs on an arbitrary design interval $[a,b]$. In general, the optimal design will change from the design on $(-\infty, \infty)$ if any of the designs points is no longer included in the interval. Therefore, at least one of the two design points will likely be one of the bounds of the interval. Theoretical justifications for this phenomenon can be found in Sebastiani [11]. 
 
 Table 2 shows how the design interval affects the optimal design points. For example, if the interval excludes the global optimal point -1.543, then the optimal design will have one point at the bound of the design interval closest to that point. The other design point is also changed from $1.543$ to 1.796 to adjust for the change in the first point. All the designs remain equally weighted.
 
@@ -240,7 +240,7 @@ For the case when $a,b$ were both greater than the optimal design points on $(-\
 \end{figure}
 
 \subsection{Quadratic $\eta$ on $(-\infty, \infty)$}
-There are no analytic results for locally D-optimal designs when $\eta_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2$. However, Fornious was able to find locally D-optimal designs numerically for several nominal $\beta$. If $\beta_1 \neq 0$, then the design shifts along the design space. Therefore, the example nominal values have $\beta_1$ set at 0.
+There are no analytic results for locally D-optimal designs when $\eta_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2$. However, Fornius [3] was able to find locally D-optimal designs numerically for several nominal $\beta$. If $\beta_1 \neq 0$, then the design shifts along the design space. Therefore, the example nominal values have $\beta_1$ set at 0.
 
 Table 3 compares the results from Fornious with the results from the genetic algorithm. The designs produced by the genetic algorithm are very close to the designs from Fornious and have sensitivity plots that indicate optimality. Some sets of nominal parameter values result in an optimal 3 point design while others have an optimal design with 4 points. Figure 3 shows the sensitivity plot for a 4 point design with $\beta = (2, 0, -0.1)$. Figure 4 shows a 3 point design for $\beta = (-2, 0, -4)$.
 \begin{table}
@@ -356,9 +356,49 @@ In this paper, we find locally D-optimal designs for linear and quadratic logist
 
  Previous results depend on a variety of analytic and numeric methods to find the same designs. The advantage of our approach is that the genetic algorithm is a single method for finding optimal designs. This makes it easy for an investigator to change design parameters and find optimal designs for multiple scenarios.
  
-Our approach can be extended to other design problems for the logistic regression model. This paper considered locally D-optimal designs, but future work may consider A, E, and G optimal designs. The logit link function may also be exchanged for other link functions. An extension to fractional polynomials (Royston \& Altman, 1994) may also be possible.
+Our approach can be extended to other design problems for the logistic regression model. This paper considered locally D-optimal designs, but future work may consider A, E, and G optimal designs. The logit link function may also be exchanged for other link functions. An extension to fractional polynomials [10] is also possible.
  
- 
+\newpage
+
 \section{References}
+\begin{enumerate}
+\item K. Deb, K. Sindhya, and T. Okabe, Self-adaptive simulated binary
+crossover for real-parameter optimization, Proceedings of the Annual
+Conference on Genetic and Evolutionary Computation, 2007, 1187-1194.
+
+\item Ford, I. , Torsney, B. and Wu, C.F.J. (1992) The use of a canonical form in the construction of locally optimal designs for non-linear problems. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 54(2), pp. 569-583. 
+\item Fornius, E. (2007) D-optimal Designs for Quadratic Logistics Regression Models. International Journal of Statistical Sciences, Vol. 6, 2007, pp 269-303.
+
+\item Holland, John (1992). Adaptation in Natural and Artificial Systems. Cambridge, MA: MIT Press. ISBN 978-0262581110
+\item Karaboga, D. (2005). An Idea Based on Honey Bee Swarm for Numerical Optimization.
+\item J. Kennedy and R. Eberhart, "Particle swarm optimization," Proceedings of ICNN'95 - International Conference on Neural Networks, 1995, pp. 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
+\item  Shwetank Lall, Seema Jaggi, Eldho Varghese, Cini Varghese \& Arpan Bhowmik (2018) An algorithmic approach to construct D-optimal saturated designs for logistic model, Journal of Statistical Computation and Simulation, 88:6, 1191-1199, DOI: 10.1080/00949655.2018.1425689 
+
+\item Thomas Mathew, Bikas Kumar Sinha,
+Optimal designs for binary data under logistic regression,
+Journal of Statistical Planning and Inference,
+Volume 93, Issues 1–2,
+2001,
+Pages 295-307,
+ISSN 0378-3758,
+https://doi.org/10.1016/S0378-3758(00)00173-7.
+
+\item Storn, R., Price, K. Differential Evolution – A Simple and Efficient Heuristic for global Optimization over Continuous Spaces. Journal of Global Optimization 11, 341–359 (1997). https://doi.org/10.1023/A:1008202821328
+
+\item Royston P, Altman DG (1994) Regression using fractional polynomials of continuous covariates: parsimonious parametric modelling (with discussion). Appl Stat 43(3):429–467
+
+\item Paola Sebastiani, Raffaella Settimi,
+A note on D-optimal designs for a logistic regression model,
+Journal of Statistical Planning and Inference,
+Volume 59, Issue 2, 
+1997, 
+https://doi.org/10.1016/S0378-3758(96)00111-5.
+
+
+\end{enumerate}
+
+
+\newpage
+
 \section{Appendix}
 \end{document}
