@@ -20,6 +20,19 @@ Logistic regression is a popular model for a binary outcome. While locally D-opt
 \end{abstract}
 
 \section{Introduction}
+Logistic regression is a popular model for linking a binary outcome to one or more covariates. For the case of a single covariate, the model links a linear function of the covariate to the mean of the Bernouolli distribution. The resulting model can then be used to model the probability of an event occuring given a certain value of the covariate. This model has many extensions, including the addition of a squared term to the linear predictor.
+
+Before using logistic regression, it is important to design the experiment with the model in mind. For a fixed sample size $N$, we may wish to measure the covariate and outcome at certain points such that optimal model performance is obtained. Additionally, we should also consider how many of the covariate measurements to take at each point in the design space. Therefore, we want to find an optimal design $\xi$ such that the model achieves optimal performance according to some optimality criterion. A D-optimal design minimizes the volume of the confidence ellipsoid and is a common approach to this problem. For non-linear models, such as logistic regression, the D-optimal design depends on the parameters, so we looks for a locally optimal design given the paramters. These nomial values may be obtained from an intial analysis or from previous results.
+
+There are many papers on optimal designs for logistic regression. The locally D-optiaml design for the lienar predictor $\eta = \beta_0 + \beta_1 x$ can be found analytically. Ford (1972) proposed a D-optimal design on an unbounded interval \textbf{CHECH}. Sebastinani and Settimi (1992) derive D-optimal designs on several bounded design intervals. Numerical appproaches have also been treid. For example, Lall et. al (2018) find D-optimal designs on using a modified Fedorov algorithm.
+
+For the quadratic model with linear predictor $\eta = \beta_0 + \beta_1 + \beta_2x^2$, there have been no analytic results. Fornious (2005) found a D-optimal design for the quadratic model numerically.
+
+Although some optimal designs for simple models have been obtained analytically, the optimal designs for more complicated models may be difficult or impossible to obtain in this way. Traditional numerical optimization algorithms may help, they may also be complicated to implement. In both apporaches, minor changes to design may have major consequences in the ability to obtain the opitmal design.
+
+
+
+
 \section{Preliminaries}
 \subsection{Logistic Regression}
 Suppose we have a binary outcome modeled as $y_i \sim \text{Bernoulli}(p_i)$ for observations $i = 1, \dots, n$ and $0 \leq p_i < 1$. We can add a predictor $x_i$ into the model using the logit link function
