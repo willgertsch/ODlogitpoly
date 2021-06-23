@@ -5,6 +5,7 @@ beta = [2, 0, -4]; % nominal values, enter 3 values to add squared term
 lower = -Inf; % design interval
 upper = Inf;
 numpts = 4; % number of design ponts
+powers = [1, 2]; % powers to use for fractional polynomials
 
 % algorithm options
 method = @GA; % algorithm to use
