@@ -11,7 +11,7 @@ function h = H_j(x, j, p)
         h = BT(x, p(j));
     elseif p(j) == p(j-1)
         % recursive step
-        h = H_j(x, j-1, p) * log(x);
+        h = H_j(x, j-1, p) .* log(x);
     end
     
     return
