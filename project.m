@@ -4,8 +4,8 @@
 beta = [2, 0, -4]; % nominal values, enter 3 values to add squared term
 lower = -Inf; % design interval
 upper = Inf;
-numpts = 3; % number of design ponts
-powers = [-1, 2]; % powers to use for fractional polynomials, empty => standard
+numpts = 2; % number of design ponts
+powers = [-1,1]; % powers to use for fractional polynomials, empty => standard
 
 % algorithm options
 method = @GA; % algorithm to use
@@ -37,10 +37,16 @@ init = @(n, d) [unifrnd(init_low, init_up, n/2, numpts),...
 upperbounds = [upper*ones([1,numpts]), Inf*ones([1,numpts])];
 lowerbounds = [lower*ones([1,numpts]), zeros(1,numpts)];
 
+if isequal(method, @GA)
+    algo = {method, proC, disC, proM, disM};
+else
+    algo = method;
+end
+
 % find the optimal design
 [Dec,Obj,Con] = platemo('objFcn', @(x,d) logistic(x, beta, opt, powers),...
     'lower', lowerbounds, 'upper', upperbounds, ...
-    'algorithm', {method, proC, disC, proM, disM}, ...
+    'algorithm', algo, ...
     'decFcn', @(x, d) sum_constraints(x, upper, lower),...
     'maxFE', maxFE, ...
     'N', swarm, ...
@@ -58,7 +64,7 @@ fprintf("Objective value: %f\n", xi(end));
 % check if design points are optimal
 fprintf("Sensitivity function values:\n");
 for i = 1:numpts
-    ch_i = ch_logistic(xi(i), xi(1:end-1), beta, opt);
+    ch_i = ch_logistic(xi(i), xi(1:end-1), beta, opt, powers);
     fprintf("%f ", ch_i);
 end
 fprintf("\n");
@@ -79,4 +85,4 @@ else
     low = min(xi(1:numpts)) - 1;
 end
 
-plot_logistic(xi(1:end-1), beta, opt, low, up);
+plot_logistic(xi(1:end-1), beta, opt, low, up, powers);

@@ -1,16 +1,18 @@
 % sensitivity function for two parameter logistic model
-function y = ch_logistic(z, vars, beta, opt)
+function y = ch_logistic(z, vars, beta, opt, p)
     
     numpts = length(vars)/2;
     x = vars(1:numpts);
     w = vars(numpts+1:end);
-    
-%     sigma = exp(beta(1) + beta(2)*xvars)./(1 + exp(beta(1) + beta(2)*xvars)).^2;
-%     g = exp(beta(1) + beta(2)*x)/(1+exp(beta(1) + beta(2)*x))^2;
 
      % compute eta
     lbeta = length(beta);
-    if lbeta == 2
+    if lbeta == 3 && ~isempty(p)
+        eta = fracpoly(x, 2, beta, p);
+        etaz = fracpoly(z, 2, beta, p);
+        p1 = p(1);
+        p2 = p(2);
+    elseif lbeta == 2
        eta = beta(1) + beta(2) * x;
        etaz = beta(1) + beta(2) * z;
     elseif lbeta == 3
@@ -29,7 +31,16 @@ function y = ch_logistic(z, vars, beta, opt)
     % Design matrix
     M = 0;
     for i = 1:numpts
-        if lbeta == 3
+        if lbeta == 3 && ~isempty(p)
+            % take advantage of symmetry
+            m12 = x(i)^p1;
+            m13 = x(i)^p2;
+            m23 = x(i)^(p1+p2);
+            M_i = w(i)*sigma(i) * ...
+                [1 m12 m13;...
+                m12 x(i)^(2*p1) m23;...
+                m13 m23 x(i)^(2*p2)];
+        elseif lbeta == 3
             M_i = w(i)*sigma(i) .* [1 x(i) x(i)^2; x(i) x(i)^2 x(i)^3;...
                 x(i)^2 x(i)^3 x(i)^4];
         else 
@@ -45,7 +56,9 @@ function y = ch_logistic(z, vars, beta, opt)
     
     % switch optimality
     if (opt == 'D')
-        if lbeta == 3
+        if lbeta == 3 && ~isempty(p)
+            y = g * [1 z^p1 z^p2] * Minv * [1;z^p1;z^p2] - 3;
+        elseif lbeta == 3
             y = g * [1 z z^2] * Minv * [1;z;z^2] - 3;
         else
             y = g * [1 z] * Minv * [1;z] - 2;

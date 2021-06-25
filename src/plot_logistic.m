@@ -1,7 +1,7 @@
-function plot_logistic(xi, beta, opt, low, up)
+function plot_logistic(xi, beta, opt, low, up, p)
     
     x = linspace(low, up, 100);
-    y = arrayfun(@(x) ch_logistic(x, xi, beta, opt), x);
+    y = arrayfun(@(x) ch_logistic(x, xi, beta, opt, p), x);
     plot(x,y)
     xlim([low, up])
     yline(0, '--')
