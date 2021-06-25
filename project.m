@@ -4,8 +4,8 @@
 beta = [2, 0, -4]; % nominal values, enter 3 values to add squared term
 lower = -Inf; % design interval
 upper = Inf;
-numpts = 2; % number of design ponts
-powers = [-1,1]; % powers to use for fractional polynomials, empty => standard
+numpts = 3; % number of design ponts
+powers = [-0.5, 1]; % powers to use for fractional polynomials, empty => standard
 
 % algorithm options
 method = @GA; % algorithm to use
@@ -15,6 +15,11 @@ proC = 1; % prob. of crossover
 disC = 20; % distr. index of cross-over: variance around parents
 proM = 1; % prob. of mutation
 disM = 20; % distr. index of mutation: variance of mutation
+
+% sensitivity functions
+% matrix inverse can cause problems in computing sensitivity function
+% can disable if set to false
+sens = false;
 
 % work in progress
 % matrix singularity gives issues with A and E opt.
@@ -60,29 +65,31 @@ disp(xi(1:numpts))
 disp(xi(numpts+1:end-1))
 fprintf("Objective value: %f\n", xi(end));
 
-
-% check if design points are optimal
-fprintf("Sensitivity function values:\n");
-for i = 1:numpts
-    ch_i = ch_logistic(xi(i), xi(1:end-1), beta, opt, powers);
-    fprintf("%f ", ch_i);
+if sens
+    % check if design points are optimal
+    fprintf("Sensitivity function values:\n");
+    for i = 1:numpts
+        ch_i = ch_logistic(xi(i), xi(1:end-1), beta, opt, powers);
+        fprintf("%f ", ch_i);
+    end
+    fprintf("\n");
+    
+    % plot
+    % set bounds for plot
+    % will follow design interval if bounded
+    % otherwise will be derived from solutions
+    if upper < Inf
+        up = upper + 1;
+    else
+        up = max(xi(1:numpts)) + 1;
+    end
+    
+    if lower > -Inf
+        low = lower - 1;
+    else
+        low = min(xi(1:numpts)) - 1;
+    end
+    
+    plot_logistic(xi(1:end-1), beta, opt, low, up, powers);
 end
-fprintf("\n");
 
-% plot
-% set bounds for plot
-% will follow design interval if bounded
-% otherwise will be derived from solutions
-if upper < Inf
-   up = upper + 1;
-else
-    up = max(xi(1:numpts)) + 1;
-end
-
-if lower > -Inf
-    low = lower - 1;
-else
-    low = min(xi(1:numpts)) - 1;
-end
-
-plot_logistic(xi(1:end-1), beta, opt, low, up, powers);
