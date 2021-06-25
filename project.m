@@ -4,8 +4,8 @@
 beta = [2, 0, -4]; % nominal values, enter 3 values to add squared term
 lower = -Inf; % design interval
 upper = Inf;
-numpts = 4; % number of design ponts
-powers = [1, 2]; % powers to use for fractional polynomials
+numpts = 3; % number of design ponts
+powers = [-1, 2]; % powers to use for fractional polynomials, empty => standard
 
 % algorithm options
 method = @GA; % algorithm to use
@@ -38,7 +38,7 @@ upperbounds = [upper*ones([1,numpts]), Inf*ones([1,numpts])];
 lowerbounds = [lower*ones([1,numpts]), zeros(1,numpts)];
 
 % find the optimal design
-[Dec,Obj,Con] = platemo('objFcn', @(x,d) logistic(x, beta, opt),...
+[Dec,Obj,Con] = platemo('objFcn', @(x,d) logistic(x, beta, opt, powers),...
     'lower', lowerbounds, 'upper', upperbounds, ...
     'algorithm', {method, proC, disC, proM, disM}, ...
     'decFcn', @(x, d) sum_constraints(x, upper, lower),...

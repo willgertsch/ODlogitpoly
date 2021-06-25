@@ -1,5 +1,5 @@
 % more general logistic objective
-function obj = logistic(vars, beta, opt)
+function obj = logistic(vars, beta, opt, p)
 
     % Figure out how many design points
     numpts = length(vars)/2;
@@ -10,7 +10,11 @@ function obj = logistic(vars, beta, opt)
     
     % compute eta
     lbeta = length(beta);
-    if lbeta == 2
+    if ~isempty(p) && lbeta == 3 % degree 2 frac poly
+        eta = fracpoly(x, 2, beta, p);
+        p1 = p(1);
+        p2 = p(2);
+    elseif lbeta == 2
        eta = beta(1) + beta(2) * x;
     elseif lbeta == 3
         eta = beta(1) + beta(2) * x + beta(3) * x.^2;
@@ -26,10 +30,19 @@ function obj = logistic(vars, beta, opt)
     % Design matrix
     M = 0;
     for i = 1:numpts
-        if lbeta == 3
+        if lbeta == 3 && ~isempty(p)
+            % take advantage of symmetry
+            m12 = x(i)^p1;
+            m13 = x(i)^p2;
+            m23 = x(i)^(p1+p2);
+            M_i = w(i)*sigma(i) * ...
+                [1 m12 m13;...
+                m12 x(i)^(2*p1) m23;...
+                m13 m23 x(i)^(2*p2)];
+        elseif lbeta == 3
             M_i = w(i)*sigma(i) * [1 x(i) x(i)^2; x(i) x(i)^2 x(i)^3;...
                 x(i)^2 x(i)^3 x(i)^4];
-        else 
+        elseif lbeta == 2 
             M_i = [w(i)*sigma(i) w(i)*sigma(i)*x(i); ...
             w(i)*sigma(i)*x(i) w(i)*sigma(i)*x(i)^2];
         end
