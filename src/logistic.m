@@ -57,7 +57,7 @@ function obj = logistic(vars, beta, opt, p)
         
     elseif (opt == 'A')
         
-        obj = trace(inv(M + eye(2)));
+        obj = trace(inv(M));
         
     elseif (opt == 'E') % experiment with E-opt
         obj = -min(eig(M));

@@ -1,11 +1,11 @@
 % find locally optimal designs for logistic model
 
 % design options
-beta = [2, 0, -4]; % nominal values, enter 3 values to add squared term
-lower = -Inf; % design interval
+beta = [1, 1, 2]; % nominal values, enter 3 values to add squared term
+lower = 0; % design interval
 upper = Inf;
 numpts = 3; % number of design ponts
-powers = [-0.5, 1]; % powers to use for fractional polynomials, empty => standard
+powers = [-1,1]; % powers to use for fractional polynomials, empty => standard
 
 % algorithm options
 method = @GA; % algorithm to use
@@ -19,7 +19,7 @@ disM = 20; % distr. index of mutation: variance of mutation
 % sensitivity functions
 % matrix inverse can cause problems in computing sensitivity function
 % can disable if set to false
-sens = false;
+sens = true;
 
 % work in progress
 % matrix singularity gives issues with A and E opt.
@@ -89,6 +89,13 @@ if sens
     else
         low = min(xi(1:numpts)) - 1;
     end
+    
+    % special plotting for fractional polynomials
+    if ~isempty(powers)
+        low = 0;
+        up = max(xi(1:numpts)) + 1;
+    end
+        
     
     plot_logistic(xi(1:end-1), beta, opt, low, up, powers);
 end
