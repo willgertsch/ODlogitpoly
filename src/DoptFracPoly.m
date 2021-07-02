@@ -82,7 +82,7 @@ function DoptFracPoly(beta, powers, pts, sens)
         % special plot bounds for fractional polynomials
         if ~isempty(powers)
             low = 0;
-            up = max(xi(1:pts)) + 1;
+            up = max(xi(1:pts)) * 1.5;
         end
 
         plot_logistic(xi(1:end-1), beta, 'D', low, up, powers);
