@@ -57,7 +57,7 @@ function y = ch_logistic(z, vars, beta, opt, p)
     % switch optimality
     if (opt == 'D')
         if lbeta == 3 && ~isempty(p)
-            y = g * [1 z^p1 z^p2] * pinv(M) * [1;z^p1;z^p2] - 3;
+            y = g * [1 z^p1 z^p2] * (M \ [1;z^p1;z^p2]) - 3;
         elseif lbeta == 3
             y = g * [1 z z^2] * (M \ [1;z;z^2]) - 3;
         else
