@@ -1,11 +1,11 @@
 % find locally optimal designs for logistic model
 
 % design options
-beta = [1, 1, 2]; % nominal values, enter 3 values to add squared term
+beta = [5, 2, 1]; % nominal values, enter 3 values to add squared term
 lower = 0; % design interval
 upper = Inf;
 numpts = 3; % number of design ponts
-powers = [-1,1]; % powers to use for fractional polynomials, empty => standard
+powers = [-2,1]; % powers to use for fractional polynomials, empty => standard
 
 % algorithm options
 method = @GA; % algorithm to use
