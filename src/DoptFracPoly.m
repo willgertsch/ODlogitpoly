@@ -5,7 +5,8 @@
 % powers: powers for x in linear predictor with p1 < p2
 % pts: number of design points
 % sens: calculate and plot sensitivity function for final design
-function DoptFracPoly(beta, powers, pts, sens)
+% algo: {@METHOD, maxFE, swarm size, args}
+function obj = DoptFracPoly(beta, powers, pts, sens, algo)
 
     % sanity check inputs
     if length(beta) ~= 3
@@ -26,24 +27,28 @@ function DoptFracPoly(beta, powers, pts, sens)
     lower = 0;
     upper = Inf;
     
-    % algorithm options
-    method = @GA; % algorithm to use
-    iterations = 100; % number of iterations
-    swarm = 1000; % size of the swarm
-    proC = 1; % prob. of crossover
-    disC = 20; % distr. index of cross-over: variance around parents
-    proM = 1; % prob. of mutation
-    disM = 20; % distr. index of mutation: variance of mutation
-    algo = {method, proC, disC, proM, disM};
+%     % algorithm options
+%     method = @GA; % algorithm to use
+%     iterations = 100; % number of iterations
+%     swarm = 1000; % size of the swarm
+%     proC = 1; % prob. of crossover
+%     disC = 20; % distr. index of cross-over: variance around parents
+%     proM = 1; % prob. of mutation
+%     disM = 20; % distr. index of mutation: variance of mutation
+%     algo = {method, proC, disC, proM, disM};
     
     % convert iterations to function evals
-    maxFE = iterations * swarm;
+%     maxFE = iterations * swarm;
+
+    method = [algo(1), algo(4:end)];
+    maxFE = algo{2};
+    swarm = algo{3};
     
     % initialize swarm in [0,5]
     init_low = 0; 
     init_up = 5;
-    init = @(n, d) [unifrnd(init_low, init_up, n/2, pts),...
-        unifrnd(0, 1, n/2, pts)];
+    init = @(n, d) [unifrnd(init_low, init_up, n, pts),...
+        unifrnd(0, 1, n, pts)];
     
     % create upper and lower bounds for design points and weights
     % length of these vectors determine the number of design points
@@ -55,7 +60,7 @@ function DoptFracPoly(beta, powers, pts, sens)
     % call PlatEMO to find the optimal design
     [Dec,Obj,~] = platemo('objFcn', @(x,d) logistic(x, beta, 'D', powers),...
         'lower', lowerbounds, 'upper', upperbounds, ...
-        'algorithm', @GA, ...
+        'algorithm', method, ...
         'decFcn', @(x, d) sum_constraints(x, upper, lower),...
         'maxFE', maxFE, ...
         'N', swarm, ...
@@ -68,6 +73,7 @@ function DoptFracPoly(beta, powers, pts, sens)
     disp(xi(1:pts))
     disp(xi(pts+1:end-1))
     fprintf("Objective value: %f\n", xi(end));
+    obj = xi(end);
     
     if sens
         % check if design points are optimal
