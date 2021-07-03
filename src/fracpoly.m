@@ -21,7 +21,7 @@ function eta = fracpoly(x, m, beta, p)
     eta = beta(1);
     
     % x terms
-    % loop will run twice for m = 3 and once for m = 2
+    % loop will run twice; once for m = 3 and once for m = 2
     for j = 2:m+1
         
         eta = eta + beta(j) * H_j(x, j, p);

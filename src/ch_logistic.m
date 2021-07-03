@@ -33,13 +33,21 @@ function y = ch_logistic(z, vars, beta, opt, p)
     for i = 1:numpts
         if lbeta == 3 && ~isempty(p)
             % take advantage of symmetry
-            m12 = x(i)^p1;
-            m13 = x(i)^p2;
-            m23 = x(i)^(p1+p2);
-            M_i = w(i)*sigma(i) * ...
-                [1 m12 m13;...
-                m12 x(i)^(2*p1) m23;...
-                m13 m23 x(i)^(2*p2)];
+            % need to use correct functions of x
+            %m12 = x(i)^p1;
+            %m13 = x(i)^p2;
+            %m23 = x(i)^(p1+p2);
+            m12 = H_j(x(i), 2, [1, p]);
+            m13 = H_j(x(i), 3, [1, p]);
+            m23 = H_j(x(i), 2, [1,p]) * H_j(x(i), 3, [1,p]);
+            %M_i = w(i)*sigma(i) * ...
+             %   [1 m12 m13;...
+              %  m12 x(i)^(2*p1) m23;...
+              %  m13 m23 x(i)^(2*p2)];
+             M_i = w(i)*sigma(i) * ...
+                 [1 m12 m13; ...
+                 m12 H_j(x(i), 2, [1,p])^2 m23; ...
+                 m13 m23 H_j(x(i), 3, [1,p])^2];
         elseif lbeta == 3
             M_i = w(i)*sigma(i) .* [1 x(i) x(i)^2; x(i) x(i)^2 x(i)^3;...
                 x(i)^2 x(i)^3 x(i)^4];
@@ -57,7 +65,8 @@ function y = ch_logistic(z, vars, beta, opt, p)
     % switch optimality
     if (opt == 'D')
         if lbeta == 3 && ~isempty(p)
-            y = g * [1 z^p1 z^p2] * (M \ [1;z^p1;z^p2]) - 3;
+            b = [1; H_j(z, 2, [1, p]); H_j(z, 3, [1,p])];
+            y = g * b' * pinv(M) * b - 3;
         elseif lbeta == 3
             y = g * [1 z z^2] * (M \ [1;z;z^2]) - 3;
         else
