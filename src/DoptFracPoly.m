@@ -53,7 +53,7 @@ function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo)
     % create upper and lower bounds for design points and weights
     % length of these vectors determine the number of design points
     % need an equal number of weights
-    upperbounds = [upper*ones([1,pts]), Inf*ones([1,pts])];
+    upperbounds = [upper*ones([1,pts]), [ones([1,pts])];
     lowerbounds = [lower*ones([1,pts]), zeros(1,pts)];
     
     
