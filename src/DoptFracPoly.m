@@ -6,7 +6,7 @@
 % pts: number of design points
 % sens: calculate and plot sensitivity function for final design
 % algo: {@METHOD, maxFE, swarm size, args}
-function obj = DoptFracPoly(beta, powers, pts, sens, algo)
+function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo)
 
     % sanity check inputs
     if length(beta) ~= 3
@@ -74,6 +74,7 @@ function obj = DoptFracPoly(beta, powers, pts, sens, algo)
     disp(xi(pts+1:end-1))
     fprintf("Objective value: %f\n", xi(end));
     obj = xi(end);
+    design = xi(1:end-1);
     
     if sens
         % check if design points are optimal
