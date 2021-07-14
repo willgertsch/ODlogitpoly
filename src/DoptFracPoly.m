@@ -22,7 +22,7 @@ function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo, int)
     elseif pts < 1
         disp("Invalid number of design points");
         return
-    elseif int(1) <= 0
+    elseif int(1) < 0
         disp("Fractional polynomials are not welll defined for non-positive x");
         return
     end
