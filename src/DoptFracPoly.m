@@ -6,7 +6,7 @@
 % pts: number of design points
 % sens: calculate and plot sensitivity function for final design
 % algo: {@METHOD, maxFE, swarm size, args}
-% int: design interval [a,b]
+% int: design interval [a,b], a > 0 
 function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo, int)
 
     % sanity check inputs
@@ -21,6 +21,9 @@ function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo, int)
         return
     elseif pts < 1
         disp("Invalid number of design points");
+        return
+    elseif int(1) <= 0
+        disp("Fractional polynomials are not welll defined for non-positive x");
         return
     end
     
