@@ -6,7 +6,8 @@
 % pts: number of design points
 % sens: calculate and plot sensitivity function for final design
 % algo: {@METHOD, maxFE, swarm size, args}
-function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo)
+% int: design interval [a,b]
+function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo, int)
 
     % sanity check inputs
     if length(beta) ~= 3
@@ -24,8 +25,8 @@ function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo)
     end
     
     % set design interval to [0, inf]
-    lower = 0;
-    upper = Inf;
+    lower = int(1);
+    upper = int(2);
     
 %     % algorithm options
 %     method = @GA; % algorithm to use
@@ -53,7 +54,7 @@ function [obj, design] = DoptFracPoly(beta, powers, pts, sens, algo)
     % create upper and lower bounds for design points and weights
     % length of these vectors determine the number of design points
     % need an equal number of weights
-    upperbounds = [upper*ones([1,pts]), [ones([1,pts])];
+    upperbounds = [upper*ones([1,pts]), ones([1,pts])];
     lowerbounds = [lower*ones([1,pts]), zeros(1,pts)];
     
     
