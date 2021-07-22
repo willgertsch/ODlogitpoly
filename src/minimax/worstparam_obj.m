@@ -1,9 +1,8 @@
 % compute objective function for worst parameter finding
 % D-optimality
 % xi: vector of design points(1:n/2) and weights (n/2+1:end)
-% beta: parameter values
-% p:
-function obj = worstparam_obj(xi, beta, p)
+% param: [b0, b1, b2, p1, p2]
+function obj = worstparam_obj(xi, param)
     
     % calc number of design points
     numpts = length(xi)/2;
@@ -11,6 +10,10 @@ function obj = worstparam_obj(xi, beta, p)
     % design points and weights
     x = xi(1:numpts);
     w = xi(numpts+1:end);
+    
+    % separate parameter vector
+    beta = p(1:3);
+    p = p(4:5);
     
     % compute eta
     lbeta = length(beta);
