@@ -15,8 +15,7 @@ function [b0, b1, b2, p1, p2] = worstparam(xi, b_low, b_up, pset, algo)
     % function initialize swarm; uniformly gen points in coef interval
     init_low = min([b_low, pset]); 
     init_up = max([b_up, pset]);
-    init = @(n, d) [unifrnd(init_low, init_up, n, pts),...
-        unifrnd(0, 1, n, pts)];
+    init = @(n, d) [unifrnd(init_low, init_up, n, 5)];
     
     % set upper and lower bounds for coef and powers
     pmax = max(pset);
@@ -32,5 +31,12 @@ function [b0, b1, b2, p1, p2] = worstparam(xi, b_low, b_up, pset, algo)
         'maxFE', maxFE, ...
         'N', swarm, ...
         'initFcn', init);
+    
+    % get best result from swarm
+    out = sortrows([Dec, Obj], 6);
+    [b0, b1, b2, p1, p2] = out(1, :);
+    
+    return
+    
 
 end
